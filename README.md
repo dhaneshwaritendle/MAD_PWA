@@ -16,6 +16,7 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 Firebase documentation refered :https://firebase.google.com/docs/flutter/setup?platform=ios
-video refered: https://www.youtube.com/watch?v=mBBycL0EtBQ&t=4s
+<br>
+video refered: https://www.youtube.com/watch?v=mBBycL0EtBQ&t=4s <br>
 problems encountered : firebase and flutter configuration 
 synchronization with gradle solution update google.json file run 'flutter pub get '
