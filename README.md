@@ -1,4 +1,19 @@
-# test_case3
+# Experiments 
+## Experiment no 1:  First Flutter App
+To design a basic layout of Flutter App using Scaffold widget (Snack-Bar, Bottom-Navigation-Bar, Floating-Action-Button, App-Bar)
+
+![exp1](https://github.com/dhaneshwaritendle/MAD_PWA/assets/110600266/9a84ca10-3a5a-47c8-80ee-dd07d8928a6b)
+
+
+## Experiment 2: Common Widgets
+To include icons, images, Text, TextStyle, Font, Image, Assets, Icons, Padding, and Center  in Flutter app
+
+ ![exp2](https://github.com/dhaneshwaritendle/MAD_PWA/assets/110600266/dc61a1b9-d03b-4cf7-b13b-5bf6933f466b)
+
+## Experiment No 3: Profile Page App
+To develop a profile page feature for our Flutter application (Stateful)
+![exp3](https://github.com/dhaneshwaritendle/MAD_PWA/assets/110600266/255d2df2-3b62-4b40-a55b-e4d628c940d5)
+
 
 A new Flutter project.
 
