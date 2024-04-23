@@ -35,11 +35,14 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.indigo.shade900,
       appBar: AppBar(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.deepPurple,
           title: Text(widget.receiveruserEmail)),
       body: Column(
+
         children: [
+
         //   messages
         Expanded(child: _buildMessageList(),),
 
@@ -72,37 +75,36 @@ class _ChatPageState extends State<ChatPage> {
   }
 
 // build message item
-Widget _buildMessageItem(DocumentSnapshot document){
-    Map<String, dynamic>data=document.data() as Map<String, dynamic>;
+  Widget _buildMessageItem(DocumentSnapshot document) {
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
-// align messages on left and right depending on sender and receiver
-var alignment = (data['senderId']==_firebaseAuth.currentUser!.uid)
-  ? Alignment.centerRight
-  : Alignment.centerLeft;
+    // Get the sender email or use a default value if it is null
+    String senderEmail = data['senderEmail'] ?? 'Unknown';
 
-  return Container(
-    alignment: alignment,
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-        child:Column(
-         crossAxisAlignment:
-          (data['senderId']==_firebaseAuth.currentUser!.uid)
+    // align messages on left and right depending on sender and receiver
+    var alignment = (data['senderId'] == _firebaseAuth.currentUser!.uid)
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
+
+    return Container(
+      alignment: alignment,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: (data['senderId'] == _firebaseAuth.currentUser!.uid)
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
-          mainAxisAlignment:
-          (data['senderId']==_firebaseAuth.currentUser!.uid)
+          mainAxisAlignment: (data['senderId'] == _firebaseAuth.currentUser!.uid)
               ? MainAxisAlignment.end
               : MainAxisAlignment.start,
           children: [
-            Text(data['senderEmail']),
+            Text(senderEmail), // Use senderEmail here
             ChatBubble(message: data['message']),
           ],
         ),
-
-    ),
-  );
-}
-
+      ),
+    );
+  }
 
 
 

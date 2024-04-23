@@ -5,6 +5,8 @@ import 'package:test_case3/components/mybutton.dart';
 import 'package:test_case3/components/mytextfield.dart';
 import 'package:test_case3/services/auth/auth_service.dart';
 
+import '../components/square_tile.dart';
+
 class RegisterPage extends StatefulWidget {
 
   final void Function()? onTap;
@@ -94,6 +96,46 @@ class _RegisterPage extends State<RegisterPage> {
                       onTap: signUp,
                       text: "Sign Up "),
                   const SizedBox(height: 50,),
+
+
+                  //or continue button
+                  Padding(padding: const EdgeInsets.symmetric(horizontal: 25.0),
+
+                    child: Row(
+                      children: [
+                        Expanded(child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
+                        ),
+                        Padding(padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            'Or continue with',
+                            style: TextStyle(color: Colors.grey[700],),
+                          ),
+                        ),
+                        Expanded(child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ))
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+
+                  //google sign in
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // google button
+                      SquareTile(
+                          onTap: ()=>AuthService().signInWithGoogle(),
+                          imagePath:"lib/assets/google.png"),
+
+
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
                   //Login now
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

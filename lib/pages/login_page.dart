@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_case3/components/mybutton.dart';
 import 'package:test_case3/components/mytextfield.dart';
+import 'package:test_case3/components/square_tile.dart';
 import 'package:test_case3/services/auth/auth_service.dart';
 
 
@@ -15,26 +16,45 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  
+
   //text controllers
-  final emailController=TextEditingController();
-  final passwordController=TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool isLoading = false;
 
-    // sign in user
-  void signIn() async{
-  //   get the auth service
-    final authService = Provider.of<AuthService>(context,listen:false);
 
-    try{
+  // sign in user
+  void signIn() async {
+    //   get the auth service
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+
+    // Update isLoading to true to show the loader
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      // Try sign-in
       await authService.signInWithEmailandPassword(
-          emailController.text,
-          passwordController.text,);
-    }
-    catch (e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(e.toString(),),),);
+        emailController.text,
+        passwordController.text,
+      );
+    } catch (e) {
+      // Handle sign-in error
+      // You can show an error message here if needed
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Sign-in error: $e'),
+          duration: Duration(seconds: 3), // Adjust duration as needed
+        ),
+      );    } finally {
+      // Update isLoading to false to hide the loader
+      setState(() {
+        isLoading = false;
+      });
     }
   }
-
 
     @override
   Widget build(BuildContext context){
@@ -52,9 +72,9 @@ class _LoginPageState extends State<LoginPage> {
           
                     //logo
                      Icon(
-                      Icons.message,
-                      size: 80,
-                     color: Colors.grey.shade800,),
+                      Icons.message_rounded,
+                      size: 100,
+                     color: Colors.grey.shade700),
                     const SizedBox(height: 50,),
           
                     //welcome back message
@@ -79,10 +99,72 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true),
                     const SizedBox(height: 50,),
                     //sign in button
-                   MyButton(
-                       onTap: signIn,
-                       text: "Sign In "),
+                    Stack(
+                      children: [
+                        MyButton(
+                          onTap: signIn,
+                          text: "Sign In",
+                        ),
+                        if ( isLoading)
+                          Positioned.fill(
+                            child: Container(
+                              color: Colors.black.withOpacity(0.5),
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+
                     const SizedBox(height: 50,),
+                    
+                    //or continue button
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      
+                      child: Row(
+                        children: [
+                          Expanded(child: Divider(
+                            thickness: 0.5,
+                            color: Colors.grey[400],
+                          ),
+                          ),
+                          Padding(padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Text(
+                            'Or continue with',
+                            style: TextStyle(color: Colors.grey[700],),
+                          ),
+                          ),
+                          Expanded(child: Divider(
+                            thickness: 0.5,
+                              color: Colors.grey[400],
+                          ))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10,),
+
+                    //google sign in
+                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                       children: [
+                         // Google button
+                         SquareTile(
+                           onTap: () async {
+                             setState(() {
+                               isLoading = true;
+                             });
+                             await AuthService().signInWithGoogle();
+                             setState(() {
+                               isLoading = false;
+                             });
+                           },
+                           imagePath: "lib/assets/google.png",
+                         ),
+                       ],
+                    ),
+
+                    const SizedBox(height: 10,),
                     //Not a member?Register Now
                      Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -98,7 +180,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         )
                       ],
-                    )
+                    ),
+
                   ],
                 ),
               ),
