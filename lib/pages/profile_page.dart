@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:test_case3/components/text_box.dart';
 import 'package:test_case3/utils/utils.dart';
 
@@ -19,12 +19,12 @@ class _ProfilePageState extends State<ProfilePage> {
   // Create an instance of the ProfileService
   final currentUser = FirebaseAuth.instance.currentUser!;
   // all users
-  final usersCollection = FirebaseFirestore.instance.collection("Users");
+  final usersCollection = FirebaseFirestore.instance.collection("users");
 
   // image profile
-  void selectImage() async{
-    Uint8List img = await pickImage(ImageSource.gallery);
-  }
+  // void selectImage() async{
+  //   Uint8List img = await pickImage(ImageSource.gallery);
+  // }
   // edit field
   Future<void> editField(String field) async {
     String newValue = "";
@@ -89,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
-            .collection("Users")
+            .collection("users")
             .doc(currentUser.email)
             .snapshots(),
         builder: (context, snapshot) {
@@ -114,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           backgroundImage: NetworkImage('https://www.iconpacks.net/icons/1/free-user-icon-295-thumb.png')
                         ),
                       Positioned(
-                        child: IconButton(onPressed: selectImage,
+                        child: IconButton(onPressed: (){},
                         icon: Icon(Icons.add_a_photo),
                         ),
                         bottom: -10,
@@ -173,3 +173,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+

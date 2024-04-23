@@ -34,7 +34,9 @@ class MyApp extends StatelessWidget {
         titleTextStyle: TextStyle(
           color: Colors.black,fontSize: 23,
         )
-      ),),
+      ),
+        scaffoldBackgroundColor: Colors.deepPurple[100],
+      ),
       debugShowCheckedModeBanner: false,
       home: AuthGate(),
       // home: HomePage(),

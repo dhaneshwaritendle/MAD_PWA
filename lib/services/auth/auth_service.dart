@@ -5,14 +5,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:test_case3/model/chatUsersModel.dart';
 
 class AuthService extends ChangeNotifier {
 //   instance of auth
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  static FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
 // instance of firestore
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  static FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
+  static User get user => _firebaseAuth.currentUser!;
 
 
 // sign user in
@@ -45,15 +47,9 @@ class AuthService extends ChangeNotifier {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      // after creating the user, create a new document for the user in the usrs collection
-      _fireStore.collection('Users').doc(userCredential.user!.uid).set(
-        {
-          'uid': userCredential.user!.uid,
-          'email': email,
-          'username': email.split('@')[0],
-          'bio': 'Empty bio...',
-        },
-      );
+      _createUserDocument(
+          userCredential.user!.email!,
+          _firebaseAuth.currentUser!.uid);
 
       return userCredential;
     } on FirebaseAuthException catch (e) {
@@ -63,19 +59,21 @@ class AuthService extends ChangeNotifier {
 
   // after creating user create new document in cloud infrastructre called users
   Future<void> _createUserDocument(String email, String uid) async {
-
-    await _fireStore.collection("Users").doc(email).set({
-      'username': email.split('@')[0],
-      'email': email,
-      'bio': 'Empty bio...',
-    });
+    // after creating the user, create a new document for the user in the usrs collection
+    final chatUser= ChatUser(
+      bio: "hi ! we are Buzzin",
+      email: email,
+      username: email.split('@')[0],
+      image: user.photoURL.toString(),
+    );
+    return await _fireStore.collection('users').doc(user.uid).set(chatUser.toJson());
   }
 
 
 
 //   checks if the document is already made
   Future<bool> _userDocumentExists(String email) async {
-    final docSnapshot = await _fireStore.collection("Users").doc(email).get();
+    final docSnapshot = await _fireStore.collection("users").doc(email).get();
     return docSnapshot.exists;
   }
 

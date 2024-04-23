@@ -28,6 +28,7 @@ android {
     namespace "com.example.test_case3"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
+    compileSdkVersion 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -70,3 +71,4 @@ flutter {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.7.2')
 }
+
