@@ -35,10 +35,11 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.indigo.shade900,
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
-          backgroundColor: Colors.deepPurple,
-          title: Text(widget.receiveruserEmail)),
+          backgroundColor: Colors.black,
+          title: Text(widget.receiveruserEmail.split('@')[0],
+          style: TextStyle(color: Colors.white),)),
       body: Column(
 
         children: [

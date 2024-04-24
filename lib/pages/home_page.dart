@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_case3/components/bottom_navigation_bar.dart';
 import 'package:test_case3/components/chat_user_card.dart';
 import 'package:test_case3/model/chatUsersModel.dart';
 import 'package:test_case3/pages/chat_page.dart';
@@ -31,97 +32,83 @@ class _HomePageState extends State<HomePage> {
     authService.signOut();
   }
 
-  //profile page
-  void profile() {
-    //   go to profile page
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ProfilePage(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: const Icon(CupertinoIcons.home),
-          title: const Text('Home '),
-          actions: [
-            //search
-            IconButton(
-                onPressed: () {}, icon: const Icon(CupertinoIcons.search)),
-            //profile
+      appBar: AppBar(
+        title: const Text('Home '),
+        actions: [
+          //   sign out button
+          IconButton(
+              onPressed: signOut,
+              icon: const Icon(
+                Icons.login_outlined,
+                color: Colors.white,
+              ))
+        ],
+      ),
+      // body: _buildUserList(),
 
-            //   sign out button
-            IconButton(onPressed: signOut, icon: const Icon(Icons.logout))
-          ],
-        ),
-        // body: _buildUserList(),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("users").snapshots(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            // case value:data is loading
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+              return const Center(child: CircularProgressIndicator());
 
-        body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("users").snapshots(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              // case value:data is loading
-              case ConnectionState.waiting:
-              case ConnectionState.none:
-                return const Center(child: CircularProgressIndicator());
-
-              case ConnectionState.active:
-              case ConnectionState.done:
-                final data = snapshot.data?.docs;
-                list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ??
-                    [];
-                if(list.isNotEmpty) {
-                  return ListView.builder(
-                      itemCount: list.length,
-                      itemBuilder: (context, index) {
+            case ConnectionState.active:
+            case ConnectionState.done:
+              final data = snapshot.data?.docs;
+              list =
+                  data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+              if (list.isNotEmpty) {
+                return ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (context, index) {
+                      // Exclude current user from the list
+                      if (_auth.currentUser!.email != list[index].email) {
                         return ChatUserCard(
                           user: list[index],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  receiverUserID: list[index].uid,
+                                  receiveruserEmail: list[index].email,
+                                ),
+                              ),
+                            );
+                          },
+
                         );
-                      });
-                }else{
-                  return const Center(
-                    child: Text('No connection Found!',
-                        style: TextStyle(fontSize: 20)),
-                  );
-                }
-            }
+                      }
+                      else{
+                        log("error");
 
-
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Colors.deepPurple[500],
-            unselectedItemColor: Colors.grey.shade600,
-            selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.message),
-                label: "Chats",
-              ),
-              // BottomNavigationBarItem(
-              //   icon: Icon(Icons.group_work),
-              //   label: ("Channels"),
-              // ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.account_box,
-                ),
-                label: "Profile",
-              ),
-            ],
-            onTap: (int index) {
-              if (index == 1) {
-                // Assuming "Profile" tab is at index 1
-                profile();
+                      }
+                    });
+              } else {
+                return const Center(
+                  child: Text('No connection Found!',
+                      style: TextStyle(fontSize: 20)),
+                );
               }
-              ;
-            }));
+          }
+        },
+      ),
+    bottomNavigationBar: CustomBottomNavigationBar(
+    currentIndex: 0,
+    onTap: (index) {
+    // Handle navigation
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context)=>const ProfilePage()));
+    },
+    )
+    );
   }
 
 // build a list of users except for the current loggged in user

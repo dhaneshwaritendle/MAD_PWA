@@ -61,6 +61,7 @@ class AuthService extends ChangeNotifier {
   Future<void> _createUserDocument(String email, String uid) async {
     // after creating the user, create a new document for the user in the usrs collection
     final chatUser= ChatUser(
+      uid: _firebaseAuth.currentUser!.uid,
       bio: "hi ! we are Buzzin",
       email: email,
       username: email.split('@')[0],

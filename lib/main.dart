@@ -30,12 +30,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(appBarTheme: AppBarTheme(
         centerTitle: true,
         elevation: 1,
-        backgroundColor: Colors.deepPurple.shade400,
+        backgroundColor: Colors.black,
         titleTextStyle: TextStyle(
-          color: Colors.black,fontSize: 23,
+          color: Colors.white,fontSize: 23,
         )
       ),
-        scaffoldBackgroundColor: Colors.deepPurple[100],
+        // iconTheme: IconThemeData(color: Colors.white),
+        scaffoldBackgroundColor: Colors.grey[300],
       ),
       debugShowCheckedModeBanner: false,
       home: AuthGate(),

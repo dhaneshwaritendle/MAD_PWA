@@ -5,8 +5,9 @@ import 'package:test_case3/model/chatUsersModel.dart';
 class ChatUserCard extends StatefulWidget {
 
   final ChatUser user;
+  final VoidCallback onTap;
 
-  const ChatUserCard({super.key,required this.user});
+  const ChatUserCard({super.key,required this.user, required this.onTap,});
 
   @override
   State<ChatUserCard> createState() => _ChatUserCardState();
@@ -19,7 +20,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
     var height;
     return Card(
       child: InkWell(
-          onTap: (){},
+          onTap: widget.onTap,
           child: ListTile(
             leading: ClipRRect(
               borderRadius:BorderRadius.circular(50),
